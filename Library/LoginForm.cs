@@ -39,5 +39,10 @@ namespace Library
             }
             else MessageBox.Show("Неверный логин или пароль");
         }
+
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
