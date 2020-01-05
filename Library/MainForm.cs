@@ -24,6 +24,7 @@ namespace Library
         {
             dataGridView1.Rows.Clear();
             dataGridView3.Rows.Clear();
+            dataGridView4.Rows.Clear();
             button4.Enabled = true;
             if (textBox1.Text != "")
             {
@@ -59,7 +60,7 @@ namespace Library
                 } 
                 try
                 {
-                    SqlCommand Cmd = new SqlCommand("SELECT Book.Name AS BName, Author.Full_name AS AName, Journal.Code AS JCode, Journal.Date_issue AS DIssue, Journal.Date_return_P AS DReturn, Journal.Date_return_F AS DReturnF, Journal.Amount AS Amount, Journal.Paid AS Paid, Librarian.Full_name AS LName " +
+                    SqlCommand Cmd = new SqlCommand("SELECT Book.Name AS BName, Author.Full_name AS AName, Journal.Code AS JCode, Journal.Date_issue AS DIssue, Journal.Date_return_P AS DReturn, Journal.Date_return_F AS DReturnF, Journal.Number_account as JNum,  Journal.Amount AS Amount, Journal.Paid AS Paid, Librarian.Full_name AS LName " +
                         "FROM Journal, Book, Students, Author, Librarian WHERE Student_ID = '" + textBox1.Text + "' and Book.ID_Book = Journal.Book_ID AND Librarian.ID_Librarian = Journal.Librarian_ID AND " +
                         "Students.ID_Student = Journal.Student_ID and Book.Author_ID = Author.ID_Author ORDER BY DIssue; ", Conn);
                     Conn.Open();
@@ -68,7 +69,7 @@ namespace Library
                     while (sdr.Read())
                     {
                         string[] row = new string[] { Convert.ToString(sdr["BName"]), Convert.ToString(sdr["AName"]), Convert.ToString(sdr["JCode"]), Convert.ToString(sdr["DIssue"]),
-                        Convert.ToString(sdr["DReturn"]), Convert.ToString(sdr["DReturnF"]), Convert.ToString(sdr["Amount"]),
+                        Convert.ToString(sdr["DReturn"]), Convert.ToString(sdr["DReturnF"]), Convert.ToString(sdr["JNum"]), Convert.ToString(sdr["Amount"]),
                        Convert.ToString(sdr["Paid"]), Convert.ToString(sdr["LName"])};
                         dataGridView1.Rows.Add(row);
                     }
@@ -87,7 +88,7 @@ namespace Library
                         dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
                         button4.Enabled = false;
                     }
-                    else if (dataGridView1.Rows[i].Cells[6].Value.ToString() != "" && Convert.ToBoolean(dataGridView1.Rows[i].Cells[7].Value) == false)
+                    else if (dataGridView1.Rows[i].Cells[6].Value.ToString() != "" && Convert.ToBoolean(dataGridView1.Rows[i].Cells[8].Value) == false)
                     {
                         dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
                         button4.Enabled = false;
@@ -115,6 +116,25 @@ namespace Library
             {
                 MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            //штрафы
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Journal.Number_account as JNum, Journal.Amount as Amount, Journal.Date_return_F as Date FROM Journal " +
+                    "WHERE  Journal.Student_ID = '" + textBox1.Text + "' and Journal.Paid = 'false' and Journal.Number_account is NOT NULL; ", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    string[] row = new string[] { Convert.ToString(sdr["JNum"]), Convert.ToString(sdr["Amount"]), Convert.ToString(sdr["Date"]) };
+                    dataGridView4.Rows.Add(row);
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -122,10 +142,6 @@ namespace Library
             Application.Exit();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            
-        }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -138,6 +154,9 @@ namespace Library
             dataGridView3.BorderStyle = BorderStyle.None; dataGridView3.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridView3.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridView3.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
+            dataGridView4.BorderStyle = BorderStyle.None; dataGridView3.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView4.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridView4.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
 
             try
             {
@@ -346,6 +365,12 @@ namespace Library
                 label2.Parent = tabPage2;
                 dataGridView1.Parent = tabPage2;
             }
+            if (tabControl1.SelectedIndex == 3)
+            {
+                groupBox1.Parent = tabPage4;
+                label2.Parent = tabPage4;
+                dataGridView1.Parent = tabPage4;
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -397,6 +422,23 @@ namespace Library
                 MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             if (amount!="") MessageBox.Show("Штраф за несвоевременную сдачу книги: " + amount + " руб.");
+            button1_Click(sender, e);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string num = (string)dataGridView4.CurrentRow.Cells[0].Value;
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("UPDATE Journal SET Paid = 'true' WHERE Number_account = '" + num + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             button1_Click(sender, e);
         }
     }
