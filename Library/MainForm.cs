@@ -112,7 +112,29 @@ namespace Library
 
         private void button2_Click_1(object sender, EventArgs e)
         {
+            dataGridView2.Rows.Clear();
+            if (textBox2.Text != "")
+            {           
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("SELECT Name FROM Book WHERE Name ='" + textBox2.Text + "'", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        string[] row = new string[] { Convert.ToString(sdr["Name"])};
+                        dataGridView2.Rows.Add(row);
+                    }
+                    Conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
 
-        }
+
+
+            }
     }
 }
