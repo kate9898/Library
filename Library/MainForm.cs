@@ -59,7 +59,7 @@ namespace Library
                 {
                     SqlCommand Cmd = new SqlCommand("SELECT Book.Name AS BName, Author.Full_name AS AName, Journal.Code AS JCode, Journal.Date_issue AS DIssue, Journal.Date_return_P AS DReturn, Journal.Date_return_F AS DReturnF, Journal.Number_account AS JNum, Journal.Amount AS Amount, Journal.Paid AS Paid, Librarian.Full_name AS LName " +
                         "FROM Journal, Book, Students, Author, Librarian WHERE Student_ID = '" + textBox1.Text + "' and Book.ID_Book = Journal.Book_ID AND Librarian.ID_Librarian = Journal.Librarian_ID AND " +
-                        "Students.ID_Student = Journal.Student_ID and Book.Author_ID = Author.ID_Author ORDER BY Journal.Date_issue; ", Conn);
+                        "Students.ID_Student = Journal.Student_ID and Book.Author_ID = Author.ID_Author ORDER BY DIssue; ", Conn);
                     Conn.Open();
                     SqlDataReader sdr = Cmd.ExecuteReader();
 
@@ -80,8 +80,10 @@ namespace Library
                 DateTime date = DateTime.Now.Date;
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    if (date < Convert.ToDateTime(dataGridView1.Rows[i].Cells[4].Value))
+                    if ((date > Convert.ToDateTime(dataGridView1.Rows[i].Cells[4].Value) && dataGridView1.Rows[i].Cells[5].Value.ToString()==""))
                     dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
+                    else if (dataGridView1.Rows[i].Cells[6].Value.ToString() != "" && Convert.ToBoolean(dataGridView1.Rows[i].Cells[8].Value) == false)
+                        dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
                 }
             }
         }
@@ -94,6 +96,23 @@ namespace Library
         private void button2_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            dataGridView1.BorderStyle = BorderStyle.None;
+            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView1.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
+            dataGridView2.BorderStyle = BorderStyle.None;
+            dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView2.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridView2.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
