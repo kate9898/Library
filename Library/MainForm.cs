@@ -23,6 +23,7 @@ namespace Library
         private void button1_Click(object sender, EventArgs e)
         {
             dataGridView1.Rows.Clear();
+            dataGridView3.Rows.Clear();
             button4.Enabled = true;
             if (textBox1.Text != "")
             {
@@ -58,7 +59,7 @@ namespace Library
                 } 
                 try
                 {
-                    SqlCommand Cmd = new SqlCommand("SELECT Book.Name AS BName, Author.Full_name AS AName, Journal.Code AS JCode, Journal.Date_issue AS DIssue, Journal.Date_return_P AS DReturn, Journal.Date_return_F AS DReturnF, Journal.Number_account AS JNum, Journal.Amount AS Amount, Journal.Paid AS Paid, Librarian.Full_name AS LName " +
+                    SqlCommand Cmd = new SqlCommand("SELECT Book.Name AS BName, Author.Full_name AS AName, Journal.Code AS JCode, Journal.Date_issue AS DIssue, Journal.Date_return_P AS DReturn, Journal.Date_return_F AS DReturnF, Journal.Amount AS Amount, Journal.Paid AS Paid, Librarian.Full_name AS LName " +
                         "FROM Journal, Book, Students, Author, Librarian WHERE Student_ID = '" + textBox1.Text + "' and Book.ID_Book = Journal.Book_ID AND Librarian.ID_Librarian = Journal.Librarian_ID AND " +
                         "Students.ID_Student = Journal.Student_ID and Book.Author_ID = Author.ID_Author ORDER BY DIssue; ", Conn);
                     Conn.Open();
@@ -67,7 +68,7 @@ namespace Library
                     while (sdr.Read())
                     {
                         string[] row = new string[] { Convert.ToString(sdr["BName"]), Convert.ToString(sdr["AName"]), Convert.ToString(sdr["JCode"]), Convert.ToString(sdr["DIssue"]),
-                        Convert.ToString(sdr["DReturn"]), Convert.ToString(sdr["DReturnF"]), Convert.ToString(sdr["JNum"]), Convert.ToString(sdr["Amount"]),
+                        Convert.ToString(sdr["DReturn"]), Convert.ToString(sdr["DReturnF"]), Convert.ToString(sdr["Amount"]),
                        Convert.ToString(sdr["Paid"]), Convert.ToString(sdr["LName"])};
                         dataGridView1.Rows.Add(row);
                     }
@@ -86,12 +87,33 @@ namespace Library
                         dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
                         button4.Enabled = false;
                     }
-                    else if (dataGridView1.Rows[i].Cells[6].Value.ToString() != "" && Convert.ToBoolean(dataGridView1.Rows[i].Cells[8].Value) == false)
+                    else if (dataGridView1.Rows[i].Cells[6].Value.ToString() != "" && Convert.ToBoolean(dataGridView1.Rows[i].Cells[7].Value) == false)
                     {
                         dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
                         button4.Enabled = false;
                     }
                     }
+            }
+
+            //книги на руках
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT ID_Journal as Id, Book.Name as BName, Author.Full_Name as AName, Journal.Code as JCode FROM Journal, " +
+                    "Book, Author WHERE Journal.Student_ID = '" + textBox1.Text + "' and Date_return_F is NULL and Journal.Book_ID = Book.ID_Book " +
+                    "and Book.Author_ID = Author.ID_Author;", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    string[] row = new string[] { Convert.ToString(sdr["BName"]), Convert.ToString(sdr["AName"]), Convert.ToString(sdr["JCode"])};
+                    dataGridView3.Rows.Add(row);
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -107,14 +129,15 @@ namespace Library
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView1.BorderStyle = BorderStyle.None; dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridView1.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridView1.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
-            dataGridView2.BorderStyle = BorderStyle.None;
-            dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView2.BorderStyle = BorderStyle.None; dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridView2.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridView2.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
+            dataGridView3.BorderStyle = BorderStyle.None; dataGridView3.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView3.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridView3.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
 
             try
             {
@@ -306,6 +329,75 @@ namespace Library
             {
                 MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 0)
+            {
+                groupBox1.Parent = tabPage1;
+                label2.Parent = tabPage1;
+                dataGridView1.Parent = tabPage1;
+            }
+
+            if (tabControl1.SelectedIndex == 1)
+            {
+                groupBox1.Parent = tabPage2;
+                label2.Parent = tabPage2;
+                dataGridView1.Parent = tabPage2;
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            string idJ = "";  string amount="";
+            string bookCode = (string)dataGridView3.CurrentRow.Cells[2].Value;
+
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT ID_Journal FROM Journal WHERE Date_return_F is NULL and Student_ID  = '" + textBox1.Text + "' AND Code = '" + bookCode + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    string[] row = new string[] {
+                    idJ = Convert.ToString(sdr["ID_Journal"]) };
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("UPDATE Journal SET Date_return_F = '" + DateTime.Now.Date + "' WHERE ID_Journal = '" + idJ + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Amount FROM Journal WHERE ID_Journal = '" + idJ + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    string[] row = new string[] {
+                    amount = Convert.ToString(sdr["Amount"]) };
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (amount!="") MessageBox.Show("Штраф за несвоевременную сдачу книги: " + amount + " руб.");
+            button1_Click(sender, e);
         }
     }
 }

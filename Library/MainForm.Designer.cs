@@ -30,7 +30,17 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.label27 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -73,23 +83,18 @@
             this.button3 = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button4 = new System.Windows.Forms.Button();
-            this.label26 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.label28 = new System.Windows.Forms.Label();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button5 = new System.Windows.Forms.Button();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column9 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -99,7 +104,9 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -113,6 +120,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1349, 478);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -134,6 +142,56 @@
             this.tabPage1.Text = "Выдача книги";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // dateTimePicker2
+            // 
+            this.dateTimePicker2.Location = new System.Drawing.Point(629, 213);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.Size = new System.Drawing.Size(120, 20);
+            this.dateTimePicker2.TabIndex = 53;
+            this.dateTimePicker2.Value = new System.DateTime(2020, 2, 1, 0, 0, 0, 0);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label27.Location = new System.Drawing.Point(511, 213);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(106, 16);
+            this.label27.TabIndex = 24;
+            this.label27.Text = "Дата возврата";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(629, 190);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(120, 20);
+            this.textBox5.TabIndex = 9;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label26.Location = new System.Drawing.Point(511, 191);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(71, 16);
+            this.label26.TabIndex = 9;
+            this.label26.Text = "Артиркул";
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(197)))), ((int)(((byte)(224)))));
+            this.button4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button4.FlatAppearance.BorderSize = 0;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button4.Location = new System.Drawing.Point(767, 202);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(132, 26);
+            this.button4.TabIndex = 9;
+            this.button4.Text = "Выдать читателю";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // dataGridView2
             // 
             this.dataGridView2.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
@@ -148,6 +206,34 @@
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(797, 114);
             this.dataGridView2.TabIndex = 9;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Наименование";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 200;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Автор";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 180;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Издательство";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.Width = 130;
+            // 
+            // Column11
+            // 
+            this.Column11.HeaderText = "Год издания";
+            this.Column11.Name = "Column11";
+            // 
+            // Column12
+            // 
+            this.Column12.HeaderText = "Количество в библиотеке";
+            this.Column12.Name = "Column12";
             // 
             // groupBox2
             // 
@@ -216,12 +302,12 @@
             this.Column4,
             this.Column5,
             this.Column6,
-            this.Column7,
             this.Column8,
             this.Column9,
             this.Column10});
             this.dataGridView1.Location = new System.Drawing.Point(3, 263);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(1342, 152);
             this.dataGridView1.TabIndex = 1;
             // 
@@ -455,6 +541,9 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button5);
+            this.tabPage2.Controls.Add(this.label28);
+            this.tabPage2.Controls.Add(this.dataGridView3);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -621,129 +710,109 @@
             this.label19.TabIndex = 9;
             this.label19.Text = "ФИО";
             // 
-            // dataGridViewTextBoxColumn1
+            // dataGridView3
             // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "Наименование";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 200;
+            this.dataGridView3.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn6});
+            this.dataGridView3.Location = new System.Drawing.Point(529, 32);
+            this.dataGridView3.Name = "dataGridView3";
+            this.dataGridView3.Size = new System.Drawing.Size(554, 114);
+            this.dataGridView3.TabIndex = 10;
             // 
-            // dataGridViewTextBoxColumn2
+            // label28
             // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Автор";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 180;
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label28.Location = new System.Drawing.Point(526, 11);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(105, 16);
+            this.label28.TabIndex = 11;
+            this.label28.Text = "Книги на руках";
             // 
-            // dataGridViewTextBoxColumn3
+            // dataGridViewTextBoxColumn4
             // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Издательство";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 130;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Наименование";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.Width = 200;
             // 
-            // Column11
+            // dataGridViewTextBoxColumn5
             // 
-            this.Column11.HeaderText = "Год издания";
-            this.Column11.Name = "Column11";
+            this.dataGridViewTextBoxColumn5.HeaderText = "Автор";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.Width = 180;
             // 
-            // Column12
+            // dataGridViewTextBoxColumn6
             // 
-            this.Column12.HeaderText = "Количество в библиотеке";
-            this.Column12.Name = "Column12";
+            this.dataGridViewTextBoxColumn6.HeaderText = "Артикул";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.Width = 130;
             // 
-            // button4
+            // button5
             // 
-            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(197)))), ((int)(((byte)(224)))));
-            this.button4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button4.FlatAppearance.BorderSize = 0;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button4.Location = new System.Drawing.Point(767, 202);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(132, 26);
-            this.button4.TabIndex = 9;
-            this.button4.Text = "Выдать читателю";
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label26.Location = new System.Drawing.Point(511, 191);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(71, 16);
-            this.label26.TabIndex = 9;
-            this.label26.Text = "Артиркул";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(629, 190);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(120, 20);
-            this.textBox5.TabIndex = 9;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label27.Location = new System.Drawing.Point(511, 213);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(106, 16);
-            this.label27.TabIndex = 24;
-            this.label27.Text = "Дата возврата";
-            // 
-            // dateTimePicker2
-            // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(629, 213);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(120, 20);
-            this.dateTimePicker2.TabIndex = 53;
-            this.dateTimePicker2.Value = new System.DateTime(2020, 2, 1, 0, 0, 0, 0);
+            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(197)))), ((int)(((byte)(224)))));
+            this.button5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button5.FlatAppearance.BorderSize = 0;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button5.Location = new System.Drawing.Point(1100, 60);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(144, 26);
+            this.button5.TabIndex = 12;
+            this.button5.Text = "Отметить возврат";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Column1
             // 
             this.Column1.HeaderText = "Наименование книги";
             this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
             this.Column1.Width = 200;
             // 
             // Column2
             // 
             this.Column2.HeaderText = "Автор";
             this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             this.Column2.Width = 180;
             // 
             // Column3
             // 
             this.Column3.HeaderText = "Артикул";
             this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.Width = 130;
             // 
             // Column4
             // 
             this.Column4.HeaderText = "Дата выдачи";
             this.Column4.Name = "Column4";
-            this.Column4.Width = 115;
+            this.Column4.ReadOnly = true;
+            this.Column4.Width = 130;
             // 
             // Column5
             // 
             this.Column5.HeaderText = "Планируемая дата возврата";
             this.Column5.Name = "Column5";
-            this.Column5.Width = 120;
+            this.Column5.ReadOnly = true;
+            this.Column5.Width = 130;
             // 
             // Column6
             // 
             this.Column6.HeaderText = "Фактическая дата возврата";
             this.Column6.Name = "Column6";
-            this.Column6.Width = 120;
-            // 
-            // Column7
-            // 
-            this.Column7.HeaderText = "Номер счета";
-            this.Column7.Name = "Column7";
+            this.Column6.ReadOnly = true;
+            this.Column6.Width = 130;
             // 
             // Column8
             // 
             this.Column8.HeaderText = "Сумма";
             this.Column8.Name = "Column8";
-            this.Column8.Width = 80;
+            this.Column8.ReadOnly = true;
             // 
             // Column9
             // 
@@ -757,7 +826,8 @@
             // 
             this.Column10.HeaderText = "Библиотекарь";
             this.Column10.Name = "Column10";
-            this.Column10.Width = 170;
+            this.Column10.ReadOnly = true;
+            this.Column10.Width = 180;
             // 
             // MainForm
             // 
@@ -778,8 +848,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -841,13 +914,18 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.DataGridView dataGridView3;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
