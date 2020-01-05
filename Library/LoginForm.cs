@@ -13,7 +13,7 @@ namespace Library
 {
     public partial class LoginForm : Form
     {
-        SqlConnection Conn = new SqlConnection("workstation id=newlibrary.mssql.somee.com;packet size=4096;user id=kuzyabnn_SQLLogin_1;pwd=i7ix8nah9i;data source=newlibrary.mssql.somee.com;persist security info=False;initial catalog=newlibrary");
+        SqlConnection Conn = new SqlConnection(@"Data Source=DESKTOP-KKGIP26\SQLEXPRESS;Initial Catalog=newlibrary;Integrated Security=True");
         public LoginForm()
         {
             InitializeComponent();

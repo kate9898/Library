@@ -14,7 +14,7 @@ namespace Library
     
     public partial class MainForm : Form
     {
-        SqlConnection Conn = new SqlConnection("workstation id=newlibrary.mssql.somee.com;packet size=4096;user id=kuzyabnn_SQLLogin_1;pwd=i7ix8nah9i;data source=newlibrary.mssql.somee.com;persist security info=False;initial catalog=newlibrary");
+        SqlConnection Conn = new SqlConnection(@"Data Source=DESKTOP-KKGIP26\SQLEXPRESS;Initial Catalog=newlibrary;Integrated Security=True");
         public MainForm()
         {
             InitializeComponent();
@@ -23,6 +23,7 @@ namespace Library
         private void button1_Click(object sender, EventArgs e)
         {
             dataGridView1.Rows.Clear();
+            button4.Enabled = true;
             if (textBox1.Text != "")
             {
                 label17.Visible = true; label18.Visible = true;
@@ -80,11 +81,17 @@ namespace Library
                 DateTime date = DateTime.Now.Date;
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    if ((date > Convert.ToDateTime(dataGridView1.Rows[i].Cells[4].Value) && dataGridView1.Rows[i].Cells[5].Value.ToString()==""))
-                    dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
-                    else if (dataGridView1.Rows[i].Cells[6].Value.ToString() != "" && Convert.ToBoolean(dataGridView1.Rows[i].Cells[8].Value) == false)
+                    if ((date > Convert.ToDateTime(dataGridView1.Rows[i].Cells[4].Value) && dataGridView1.Rows[i].Cells[5].Value.ToString() == ""))
+                    {
                         dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
-                }
+                        button4.Enabled = false;
+                    }
+                    else if (dataGridView1.Rows[i].Cells[6].Value.ToString() != "" && Convert.ToBoolean(dataGridView1.Rows[i].Cells[8].Value) == false)
+                    {
+                        dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
+                        button4.Enabled = false;
+                    }
+                    }
             }
         }
 
@@ -109,7 +116,21 @@ namespace Library
             dataGridView2.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridView2.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
 
-
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Name FROM Institute", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    comboBox1.Items.Add(sdr["Name"].ToString());
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -119,12 +140,15 @@ namespace Library
             {           
                 try
                 {
-                    SqlCommand Cmd = new SqlCommand("SELECT Name FROM Book WHERE Name " + '%' + textBox2.Text + "%'", Conn);
+                    SqlCommand Cmd = new SqlCommand("SELECT Book.Name as BName, Author.Full_name as AName, Publisher.Name as PName, Book.Book_year, Quantity " +
+                        "FROM Book, Author, Publisher WHERE Book.Author_ID = Author.ID_Author and Book.Publisher_ID = Publisher.ID_Publisher " +
+                        "and(Book.Name LIKE '" + '%' + textBox2.Text + "%'" + "or Author.Full_name LIKE '" + '%' + textBox2.Text + "%'" + ")", Conn);
                     Conn.Open();
                     SqlDataReader sdr = Cmd.ExecuteReader();
                     while (sdr.Read())
                     {
-                        string[] row = new string[] {Convert.ToString(sdr["Name"])};
+                        string[] row = new string[] {Convert.ToString(sdr["BName"]), Convert.ToString(sdr["AName"]), Convert.ToString(sdr["PName"]), Convert.ToString(sdr["Book_year"]),
+                        Convert.ToString(sdr["Quantity"])};
                         dataGridView2.Rows.Add(row);
                     }
                     Conn.Close();
@@ -138,5 +162,150 @@ namespace Library
 
 
             }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox5.Text != "") { 
+                string idStudent = textBox1.Text; 
+            string idBook = ""; string codeBook = textBox5.Text;
+            string bookName = (string)dataGridView2.CurrentRow.Cells[0].Value;
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT ID_Book FROM Book WHERE Name = '" + bookName + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    string[] row = new string[] {
+                    idBook = Convert.ToString(sdr["ID_Book"]) };
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("INSERT INTO Journal (Book_ID, Librarian_ID, Student_ID, Code, Date_issue, Date_return_P, Paid) VALUES " +
+                  "('" + idBook + "', '" + 1 + "', '" + idStudent + "', '" + codeBook + "', '" + DateTime.Now.Date + "', '" + dateTimePicker2.Value + "', '" + false + "')", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                MessageBox.Show("Книга выдана");
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("UPDATE Book SET Quantity = Quantity - 1 WHERE ID_Book = '" + idBook + "'", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    Conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            textBox5.Text = "";
+           button1_Click(sender, e);
+           button2_Click_1(sender, e);
+            } else MessageBox.Show("Заполните все поля");
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox2.Items.Clear();
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Specialty.Name as SName FROM Specialty WHERE Institute_ID = (SELECT ID_Institute FROM Institute WHERE Institute.Name  ='" + comboBox1.Text + "')", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    comboBox2.Items.Add(sdr["SName"].ToString());
+                }
+                Conn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ошибка " + ex);
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox3.Items.Clear();
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Class.Name as CName FROM Class WHERE Specialty_ID = (SELECT ID_Specialty FROM Specialty WHERE Specialty.Name  ='" + comboBox2.Text + "')", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    comboBox3.Items.Add(sdr["CName"].ToString());
+                }
+                Conn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ошибка " + ex);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string idClass = ""; string newId = "";
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT ID_Class FROM CLass WHERE Class.Name = '" + comboBox3.Text + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    string[] row = new string[] {
+                    idClass = Convert.ToString(sdr["ID_Class"]) };
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT IDENT_CURRENT('Students')+1 as newId", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    string[] row = new string[] {
+                    newId = Convert.ToString(sdr["newId"]) };
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("INSERT INTO Students (Class_ID, Full_Name, Data_SC, Number_SC, Data_LC)  VALUES " +
+                  "('" + idClass + "', '" + textBox3.Text + "', '" + dateTimePicker1.Value + "', '" + textBox4.Text + "', '" + DateTime.Now.Date + "')", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                MessageBox.Show("№ читательского билета: " + newId);
+                Conn.Close();
+                textBox3.Text = ""; textBox4.Text = ""; dateTimePicker1.Text = ""; comboBox1.Text = ""; comboBox2.Text = ""; comboBox3.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
