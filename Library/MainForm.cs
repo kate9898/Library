@@ -108,6 +108,8 @@ namespace Library
             dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridView2.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridView2.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
+
+
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -117,12 +119,12 @@ namespace Library
             {           
                 try
                 {
-                    SqlCommand Cmd = new SqlCommand("SELECT Name FROM Book WHERE Name ='" + textBox2.Text + "'", Conn);
+                    SqlCommand Cmd = new SqlCommand("SELECT Name FROM Book WHERE Name " + '%' + textBox2.Text + "%'", Conn);
                     Conn.Open();
                     SqlDataReader sdr = Cmd.ExecuteReader();
                     while (sdr.Read())
                     {
-                        string[] row = new string[] { Convert.ToString(sdr["Name"])};
+                        string[] row = new string[] {Convert.ToString(sdr["Name"])};
                         dataGridView2.Rows.Add(row);
                     }
                     Conn.Close();
