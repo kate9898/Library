@@ -157,6 +157,9 @@ namespace Library
             dataGridView4.BorderStyle = BorderStyle.None; dataGridView3.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridView4.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridView4.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
+            dataGridView5.BorderStyle = BorderStyle.None; dataGridView3.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView5.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridView5.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
 
             try
             {
@@ -487,6 +490,89 @@ namespace Library
             }
             MessageBox.Show("Штраф за потерю книги: 400 руб.");
             button1_Click(sender, e);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            string num = (string)dataGridView4.CurrentRow.Cells[0].Value;
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("UPDATE Journal SET Lost = 'false' WHERE Number_account = '" + num + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            button1_Click(sender, e);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            dataGridView5.Rows.Clear();
+            if (textBox6.Text != "")
+            {
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("SELECT Book.Name as BName, Author.Full_name as AName, Publisher.Name as PName, Book.Book_year, Quantity " +
+                        "FROM Book, Author, Publisher WHERE Book.Author_ID = Author.ID_Author and Book.Publisher_ID = Publisher.ID_Publisher " +
+                        "and(Book.Name LIKE '" + '%' + textBox6.Text + "%'" + "or Author.Full_name LIKE '" + '%' + textBox6.Text + "%'" + ")", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        string[] row = new string[] {Convert.ToString(sdr["BName"]), Convert.ToString(sdr["AName"]), Convert.ToString(sdr["PName"]), Convert.ToString(sdr["Book_year"]),
+                        Convert.ToString(sdr["Quantity"])};
+                        dataGridView5.Rows.Add(row);
+                    }
+                    Conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+           
+            if (textBox5.Text != "")
+            {
+                string idBook = ""; string codeBook = textBox5.Text;
+                string bookName = (string)dataGridView5.CurrentRow.Cells[0].Value;
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("SELECT ID_Book FROM Book WHERE Name = '" + bookName + "'", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        string[] row = new string[] {
+                    idBook = Convert.ToString(sdr["ID_Book"]) };
+                    }
+                    Conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("UPDATE Book SET Quantity = Quantity + 1 WHERE ID_Book = '" + idBook + "'", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    Conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                button9_Click(sender, e);
+            }
+            else MessageBox.Show("Заполните все поля");
         }
     }
 }
