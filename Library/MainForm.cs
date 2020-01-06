@@ -229,8 +229,8 @@ namespace Library
             }
             try
             {
-                SqlCommand Cmd = new SqlCommand("INSERT INTO Journal (Book_ID, Librarian_ID, Student_ID, Code, Date_issue, Date_return_P, Paid) VALUES " +
-                  "('" + idBook + "', '" + 1 + "', '" + idStudent + "', '" + codeBook + "', '" + DateTime.Now.Date + "', '" + dateTimePicker2.Value + "', '" + false + "')", Conn);
+                SqlCommand Cmd = new SqlCommand("INSERT INTO Journal (Book_ID, Librarian_ID, Student_ID, Code, Date_issue, Date_return_P, Paid, Lost) VALUES " +
+                  "('" + idBook + "', '" + 1 + "', '" + idStudent + "', '" + codeBook + "', '" + DateTime.Now.Date + "', '" + dateTimePicker2.Value + "', '" + false + "', '" + false + "')", Conn);
                 Conn.Open();
                 SqlDataReader sdr = Cmd.ExecuteReader();
                 MessageBox.Show("Книга выдана");
@@ -377,7 +377,7 @@ namespace Library
         {
             string idJ = "";  string amount="";
             string bookCode = (string)dataGridView3.CurrentRow.Cells[2].Value;
-
+            string bookName = (string)dataGridView3.CurrentRow.Cells[0].Value;
             try
             {
                 SqlCommand Cmd = new SqlCommand("SELECT ID_Journal FROM Journal WHERE Date_return_F is NULL and Student_ID  = '" + textBox1.Text + "' AND Code = '" + bookCode + "'", Conn);
@@ -405,6 +405,18 @@ namespace Library
             {
                 MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("UPDATE Book SET Quantity = Quantity + 1 WHERE Name = '" + bookName + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             try
             {
                 SqlCommand Cmd = new SqlCommand("SELECT Amount FROM Journal WHERE ID_Journal = '" + idJ + "'", Conn);
@@ -439,6 +451,41 @@ namespace Library
             {
                 MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            button1_Click(sender, e);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            string idJ = ""; 
+            string bookCode = (string)dataGridView3.CurrentRow.Cells[2].Value;
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT ID_Journal FROM Journal WHERE Date_return_F is NULL and Student_ID  = '" + textBox1.Text + "' AND Code = '" + bookCode + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    string[] row = new string[] {
+                    idJ = Convert.ToString(sdr["ID_Journal"]) };
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("UPDATE Journal SET Date_return_F = '" + DateTime.Now.Date + "', Lost = 'true' WHERE ID_Journal = '" + idJ + "'", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            MessageBox.Show("Штраф за потерю книги: 400 руб.");
             button1_Click(sender, e);
         }
     }
