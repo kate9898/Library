@@ -22,9 +22,9 @@ namespace Library
 
         private void button1_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Clear();
-            dataGridView3.Rows.Clear();
-            dataGridView4.Rows.Clear();
+            dataGridView1.Rows.Clear(); label18.Text = ""; label16.Text = ""; label12.Text = "";
+            dataGridView3.Rows.Clear(); label17.Text = ""; label14.Text = ""; label11.Text = "";
+            dataGridView4.Rows.Clear(); label15.Text = ""; label13.Text = "";
             button4.Enabled = true;
             if (textBox1.Text != "")
             {
@@ -45,9 +45,9 @@ namespace Library
                     string[] row = new string[] {
                     label17.Text = Convert.ToString(sdr["Full_name"]),
                     label18.Text = Convert.ToString(sdr["ID_Student"]),
-                    label15.Text = Convert.ToString(sdr["Data_LC"]),
+                    label15.Text = Convert.ToDateTime(sdr["Data_LC"]).ToShortDateString(),
                     label16.Text =   Convert.ToString(sdr["Number_SC"]),
-                    label14.Text =   Convert.ToString(sdr["Data_SC"]),
+                    label14.Text =   Convert.ToDateTime(sdr["Data_SC"]).ToShortDateString(),
                     label13.Text = Convert.ToString(sdr["CName"]),
                     label12.Text = Convert.ToString(sdr["SName"]),
                     label11.Text =   Convert.ToString(sdr["IName"])};
@@ -169,6 +169,36 @@ namespace Library
                 while (sdr.Read())
                 {
                     comboBox1.Items.Add(sdr["Name"].ToString());
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Full_name FROM Author", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    comboBox4.Items.Add(sdr["Full_name"].ToString());
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Name FROM Publisher", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    comboBox5.Items.Add(sdr["Name"].ToString());
                 }
                 Conn.Close();
             }
@@ -538,9 +568,7 @@ namespace Library
 
         private void button10_Click(object sender, EventArgs e)
         {
-           
-            if (textBox5.Text != "")
-            {
+
                 string idBook = ""; string codeBook = textBox5.Text;
                 string bookName = (string)dataGridView5.CurrentRow.Cells[0].Value;
                 try
@@ -570,7 +598,128 @@ namespace Library
                 {
                     MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                button9_Click(sender, e);
+                button9_Click(sender, e);  
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("INSERT INTO Author (Full_name) VALUES " +
+                 "('" + textBox12.Text + "')", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                MessageBox.Show("Автор добавлен");
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Full_name FROM Author", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    comboBox4.Items.Add(sdr["Full_name"].ToString());
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("INSERT INTO Publisher (Name) VALUES " +
+                 "('" + textBox7.Text + "')", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                MessageBox.Show("Издательство добавлено");
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            try
+            {
+                SqlCommand Cmd = new SqlCommand("SELECT Name FROM Publisher", Conn);
+                Conn.Open();
+                SqlDataReader sdr = Cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    comboBox5.Items.Add(sdr["Name"].ToString());
+                }
+                Conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+          if  (textBox8.Text != "" && textBox9.Text != "" && textBox10.Text != "" && comboBox4.Text != "" && comboBox5.Text != "")
+            {
+                string idPub = ""; string idA = "";
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("SELECT ID_Publisher FROM Publisher WHERE Publisher.Name = '" + comboBox5.Text + "'", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        string[] row = new string[] {
+                    idPub = Convert.ToString(sdr["ID_Publisher"]) };
+                    }
+                    Conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("SELECT ID_Author FROM Author WHERE Author.Full_name = '" + comboBox4.Text + "'", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        string[] row = new string[] {
+                    idA = Convert.ToString(sdr["ID_Author"]) };
+                    }
+                    Conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+
+                try
+                {
+                    SqlCommand Cmd = new SqlCommand("INSERT INTO Book (Publisher_ID, Author_ID, Name, Book_year, Quantity)  VALUES " +
+                      "('" + idPub + "', '" + idA + "', '" + textBox8.Text + "', '" + textBox9.Text + "', '" + textBox10.Text + "')", Conn);
+                    Conn.Open();
+                    SqlDataReader sdr = Cmd.ExecuteReader();
+                    MessageBox.Show("Книга добавлена");
+                    Conn.Close();
+                    textBox8.Text = ""; textBox9.Text = ""; textBox10.Text = ""; comboBox4.Text = ""; comboBox5.Text = ""; 
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
+
             }
             else MessageBox.Show("Заполните все поля");
         }
