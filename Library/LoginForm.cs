@@ -26,6 +26,7 @@ namespace Library
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
+            //
             SqlCommand Cmd = new SqlCommand("SELECT COUNT(*) FROM Librarian WHERE Login = '"+textBox1.Text+ "' AND Password = '" + textBox2.Text + "' ", Conn);
             Conn.Open();
             object result = Cmd.ExecuteScalar();
